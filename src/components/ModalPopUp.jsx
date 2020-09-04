@@ -8,12 +8,15 @@ class ModalPopUp extends React.Component {
   }
 
   render() {
+    const { addModalShow, handleClose } = this.props;
+
     return (
       <Modal
         {...this.props}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
+        show={addModalShow}
+        onHide={handleClose}
+        backdrop="static"
+        keyboard={false}
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">

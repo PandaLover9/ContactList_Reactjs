@@ -3,85 +3,112 @@ import ModalPopUp from "./ModalPopUp";
 import { Button, ButtonToolBar } from "react-bootstrap";
 import css from "/public/styles.css";
 
-import ContactCard from "./Contact_Card";
-import AddContact from "./AddContact";
-import SearchBar from "./SearchBar";
+import Contacts from "./Contacts";
+import { Grid } from "@material-ui/core";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      searchText: "",
-      searchResult: [],
-      contactList: [],
+      contacts: [],
+      searchedText: "",
+      name: "",
+      gender: "",
+      phone: "",
+      email: "",
+      dateCreated: "",
+      dateModified: "",
+      nameError: false,
+      emailError: false,
       addModalShow: false
     };
-
-    this.handleNewContact = this.handleNewContact.bind(this);
-    this.returnContactList = this.returnContactList.bind(this);
-    this.deleteContact = this.deleteContact.bind(this);
-    this.handleSearch = this.handleSearch.bind(this);
-    this.setUpdate = this.setUpdate.bind(this);
   }
 
   //Searching handling
 
   //returnContactList, return either searchresult or current one
-  returnContactList() {
-    return this.state.searchEmail
-      ? this.state.searchResult
-      : this.state.contactList;
-  }
+  searchValue = (e) => {
+    this.setState({
+      searchedText: e.target.value
+    });
+  };
 
-  //handle new contact
-  handleNewContact(newContact) {
-    this.setState(
-      (prevState) => ({
-        contactList: [...prevState.contactList, newContact]
-      }),
-      () => console.log(this.state.contactList)
-    );
-  }
+  handleChange = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  };
 
-  //delete contact
-  deleteContact(email) {
-    const { contactList } = this.state;
-    const filteredContactList = contactList.filter((contact) => {
+  addContact = (e) => {
+    const { name, gender, phone, email, contacts } = this.state;
+    e.preventDefault();
+    if (name === "" && email === "") return;
+
+    contacts.push({
+      name: name,
+      gender: gender,
+      phone: phone,
+      email: email
+    });
+
+    this.checkForErrors(name, email);
+
+    this.setState({
+      contacts: contacts,
+      name: "",
+      gender: "",
+      phone: "",
+      email: ""
+    });
+  };
+
+  deleteContact = (email) => {
+    const { contacts } = this.state;
+    const filteredContacts = contacts.filter((contact) => {
       return contact.email !== email;
     });
     this.setState({
-      contactList: filteredContactList
+      contacts: filteredContacts
     });
-  }
+  };
 
-  // search contact (by email)
-  handleSearch(searchText) {
-    this.setState({ searchResult: [], searchText: searchText });
-    this.state.contactList.map((contact) => {
-      if (searchEmail(contact, searchText)) {
-        this.setState(
-          (prevState) => ({
-            searchResult: [...prevState.searchResult, contact]
-          }),
-          () => console.log(this.state.searchResult)
-        );
-      }
+  editContact = (email, name, gender, phone) => {
+    const { contacts } = this.state;
+    const edited = contacts.filter((contact) => {
+      return (
+        contact.email === email ||
+        contact.name === name ||
+        contact.gender === gender ||
+        contact.phone === phone
+      );
     });
-  }
-
-  // edit contact
-  setUpdate(email) {
-    const contactList = this.state.contactList;
-    contactList.map((selectedContact) => {
-      if (selectedContact.email === email) {
-        console.log(selectedContact.email + " " + email);
-      }
-    });
-    //update state
     this.setState({
-      contactList: contactList
+      name: edited.name,
+      gender: edited.gender,
+      phone: edited.phone,
+      email: edited.email,
+      dateModified: `Modified: ${new Date().toLocaleDateString()}`
     });
-  }
+  };
+
+  checkForErrors = (name, email) => {
+    this.state.contacts.map((contact) => {
+      if (contact.name === name) {
+        this.setState({
+          nameError: true,
+          addModalShow: true
+        });
+      }
+      if (contact.email === email) {
+        this.setState({
+          emailError: true,
+          addModalShow: true
+        });
+      }
+    });
+    return this.state.nameError || this.state.emailError ? true : false;
+  };
 
   //******* Modal functions ********//
   handleShow(event) {
@@ -93,11 +120,8 @@ class App extends React.Component {
   }
 
   handleClose(event) {
-    let buttonClicked = this.state.modalbutton;
-    buttonClicked = false;
-    this.setState({
-      modalbutton: buttonClicked
-    });
+    const modalshow = false;
+    this.setState({ addModalShow: modalshow });
   }
 
   show(event) {
@@ -108,39 +132,59 @@ class App extends React.Component {
     });
   }
 
+  //Modal Content
+  modalTriggered(event) {
+    const modalshow = true;
+    this.setState({ addModalShow: modalshow });
+  }
   //******* Modal functions ********//
 
   render() {
     let addModalClose = () => this.setState({ addModalShow: false });
+
+    const {
+      contacts,
+      searchedText,
+      name,
+      email,
+      nameError,
+      emailError
+    } = this.state;
+    const {
+      searchValue,
+      handleChange,
+      editContact,
+      deleteContact,
+      addContact
+    } = this;
+
+    const filteredContacts = contacts.filter((contact) => {
+      return (
+        contact.name.toLowerCase().indexOf(searchedText.toLowerCase()) !== -1
+      );
+    });
+
     return (
       <div className="container">
         <div className="heading">
           <h1>Contact List</h1>
         </div>
-        <div className="form">
-          <SearchBar onSearch={this.handleSearch} />
-          <br />
-          <AddContact onSubmit={this.handleNewContact} />
-          <br />
-          <ul className="list-group" id="contact-list">
-            {this.returnContactList().map((contact) => (
-              <li key={contact.email} className="list-group-item">
-                <ContactCard
-                  contact={contact}
-                  deleteContact={this.deleteContact}
-                  updateContact={this.setUpdate}
-                />
-              </li>
-            ))}
-          </ul>
-        </div>
+        <Grid>
+          <Contacts
+            contacts={filteredContacts}
+            searchValue={searchValue}
+            searchedText={searchedText}
+            addContact={addContact}
+            handleChange={handleChange}
+            formInputName={name}
+            email={email}
+            editContact={editContact}
+            deleteContact={deleteContact}
+            nameError={nameError}
+            emailError={emailError}
+          />
+        </Grid>
         <div>
-          <Button
-            variant="primary"
-            onClick={() => this.setState({ addModalShow: true })}
-          >
-            Modal Pop Up mou?
-          </Button>
           <ModalPopUp show={this.state.addModalShow} onHide={addModalClose} />
         </div>
       </div>

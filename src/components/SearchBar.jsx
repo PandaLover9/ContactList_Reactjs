@@ -1,23 +1,19 @@
-import React from "react";
+import React, { Component } from "react";
+import { TextField } from "@material-ui/core";
 
-const SearchBar = ({ onSearch }) => {
-  const handleChange = (e) => {
-    onSearch(e.target.value);
-  };
-  return (
-    <div className="input-group ">
-      <input
-        onChange={handleChange}
-        className="form-control"
-        type="search"
-        placeholder="Search for a contact by email"
-        id="example-search-input"
+class SearchBar extends Component {
+  render() {
+    return (
+      <TextField
+        label="Search..."
+        type="text"
+        name="searchedText"
+        margin="normal"
+        value={this.props.searchedText}
+        onChange={this.props.searchValue}
       />
-      <button className="btn btn-default" type="button">
-        <i className="fa fa-search"></i>
-      </button>
-    </div>
-  );
-};
+    );
+  }
+}
 
 export default SearchBar;

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import AddContactForm from "./AddContactForm";
+import AddContactForm from "../components/AddContactForm";
 
-export default class AddContact extends Component {
+export default class CheckEdit extends Component {
   constructor(props) {
     super(props);
 
@@ -9,8 +9,9 @@ export default class AddContact extends Component {
       isHidden: true,
       newContact: {
         name: "",
-        gender: "",
+        surname: "",
         email: "",
+        address: "",
         phone: ""
       }
     };
@@ -19,7 +20,7 @@ export default class AddContact extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  showAddContactBox() {
+  showEditContactBox() {
     this.setState({ isHidden: false });
   }
 
@@ -46,7 +47,7 @@ export default class AddContact extends Component {
   }
   renderForm() {
     return (
-      <div>
+      <div className="col-sm-8 offset-sm-2">
         <AddContactForm
           onFormSubmit={this.handleSubmit}
           onInputChange={this.handleInputChange}
