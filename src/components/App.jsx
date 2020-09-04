@@ -142,8 +142,4 @@ class App extends React.Component {
   }
 }
 
-const searchEmail = (contact, searchText) =>
-  contact.email.toLowerCase().search(searchText.toLowerCase()) !== -1 ||
-  contact.phone.toString().search(searchText) !== -1;
-
 export default App;
