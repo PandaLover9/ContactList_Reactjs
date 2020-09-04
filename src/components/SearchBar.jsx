@@ -5,7 +5,7 @@ class SearchBar extends Component {
   render() {
     return (
       <TextField
-        label="Search..."
+        label="Search by Name"
         type="text"
         name="searchedText"
         margin="normal"

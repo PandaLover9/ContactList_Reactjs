@@ -3,10 +3,6 @@ import Modal from "react-bootstrap/Modal";
 import { Button } from "react-bootstrap";
 
 class ModalPopUp extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const { addModalShow, handleClose } = this.props;
 
