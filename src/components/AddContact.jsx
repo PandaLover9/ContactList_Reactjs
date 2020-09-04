@@ -9,7 +9,7 @@ export default class AddContact extends Component {
       isHidden: true,
       newContact: {
         name: "",
-        surname: "",
+        gender: "",
         email: "",
         phone: ""
       }

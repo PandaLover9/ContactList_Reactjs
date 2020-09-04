@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import ModalPopUp from "./ModalPopUp";
 import { Button, ButtonToolBar } from "react-bootstrap";
-import Css from "/public/styles.css";
+import css from "/public/styles.css";
 
 import ContactCard from "./Contact_Card";
 import AddContact from "./AddContact";
+import SearchBar from "./SearchBar";
 
 class App extends React.Component {
   constructor(props) {
@@ -17,16 +18,17 @@ class App extends React.Component {
     };
 
     this.handleNewContact = this.handleNewContact.bind(this);
-    //this.handleSearch = this.handleSearch.bind(this);
     this.returnContactList = this.returnContactList.bind(this);
     this.deleteContact = this.deleteContact.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
+    this.setUpdate = this.setUpdate.bind(this);
   }
 
   //Searching handling
 
   //returnContactList, return either searchresult or current one
   returnContactList() {
-    return this.state.searchText
+    return this.state.searchEmail
       ? this.state.searchResult
       : this.state.contactList;
   }
@@ -52,18 +54,32 @@ class App extends React.Component {
     });
   }
 
-  //update
-  setUpdate(text, key) {
-    const items = this.state.items;
-    items.map((item) => {
-      if (item.key === key) {
-        item.text = text;
-        console.log(item.key + " " + key);
+  // search contact (by email)
+  handleSearch(searchText) {
+    this.setState({ searchResult: [], searchText: searchText });
+    this.state.contactList.map((contact) => {
+      if (searchEmail(contact, searchText)) {
+        this.setState(
+          (prevState) => ({
+            searchResult: [...prevState.searchResult, contact]
+          }),
+          () => console.log(this.state.searchResult)
+        );
+      }
+    });
+  }
+
+  // edit contact
+  setUpdate(email) {
+    const contactList = this.state.contactList;
+    contactList.map((selectedContact) => {
+      if (selectedContact.email === email) {
+        console.log(selectedContact.email + " " + email);
       }
     });
     //update state
     this.setState({
-      items: items
+      contactList: contactList
     });
   }
 
@@ -102,6 +118,8 @@ class App extends React.Component {
           <h1>Contact List</h1>
         </div>
         <div className="form">
+          <SearchBar onSearch={this.handleSearch} />
+          <br />
           <AddContact onSubmit={this.handleNewContact} />
           <br />
           <ul className="list-group" id="contact-list">
@@ -110,6 +128,7 @@ class App extends React.Component {
                 <ContactCard
                   contact={contact}
                   deleteContact={this.deleteContact}
+                  updateContact={this.setUpdate}
                 />
               </li>
             ))}
@@ -128,5 +147,9 @@ class App extends React.Component {
     );
   }
 }
+
+const searchEmail = (contact, searchText) =>
+  contact.email.toLowerCase().search(searchText.toLowerCase()) !== -1 ||
+  contact.phone.toString().search(searchText) !== -1;
 
 export default App;

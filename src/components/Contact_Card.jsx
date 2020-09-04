@@ -1,22 +1,36 @@
 import React from "react";
 
-const ContactCard = ({ contact, deleteContact }) => {
+//update
+
+const ContactCard = ({ contact, deleteContact, updateContact }) => {
   return (
     <div>
       <div>
-        <span>{contact.name + " " + contact.surname}</span>
+        <span>{contact.name}</span>
         <br />
-        <span>{contact.phone}</span>
+        <span>{contact.gender}</span>
         <br />
         <span>{contact.email}</span>
         <br />
+        <span>{contact.phone}</span>
+        <br />
+
         <button
           onClick={() => {
             //delete with button clicked
             deleteContact(contact.email);
           }}
         >
-          Delete this contact
+          Delete
+        </button>
+        <br />
+        <button
+          onClick={() => {
+            //delete with button clicked
+            updateContact(contact.email);
+          }}
+        >
+          Edit
         </button>
       </div>
       <br />
