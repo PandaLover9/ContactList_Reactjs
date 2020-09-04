@@ -18,12 +18,6 @@ function renderEditForm() {
   );
 }
 
-var isHidden = false;
-function showEditContactBox() {
-  isHidden = false;
-  return renderEditForm();
-}
-
 const ContactList = ({ contacts, editContact, deleteContact }) => {
   const rows = contacts.map((contact, i) => (
     <ListItem key={i} className="list-item">

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import ModalPopUp from "./ModalPopUp";
-import { Button, ButtonToolBar } from "react-bootstrap";
 import css from "/public/styles.css";
 
 import Contacts from "./Contacts";
@@ -52,8 +51,6 @@ class App extends React.Component {
       email: email
     });
 
-    this.checkForErrors(name, email);
-
     this.setState({
       contacts: contacts,
       name: "",
@@ -91,53 +88,6 @@ class App extends React.Component {
       dateModified: `Modified: ${new Date().toLocaleDateString()}`
     });
   };
-
-  checkForErrors = (name, email) => {
-    this.state.contacts.map((contact) => {
-      if (contact.name === name) {
-        this.setState({
-          nameError: true,
-          addModalShow: true
-        });
-      }
-      if (contact.email === email) {
-        this.setState({
-          emailError: true,
-          addModalShow: true
-        });
-      }
-    });
-    return this.state.nameError || this.state.emailError ? true : false;
-  };
-
-  //******* Modal functions ********//
-  handleShow(event) {
-    let buttonClicked = this.state.modalbutton;
-    buttonClicked = true;
-    this.setState({
-      modalbutton: buttonClicked
-    });
-  }
-
-  handleClose(event) {
-    const modalshow = false;
-    this.setState({ addModalShow: modalshow });
-  }
-
-  show(event) {
-    let buttonClicked = this.state.modalbutton;
-    buttonClicked = true;
-    this.setState({
-      modalbutton: buttonClicked
-    });
-  }
-
-  //Modal Content
-  modalTriggered(event) {
-    const modalshow = true;
-    this.setState({ addModalShow: modalshow });
-  }
-  //******* Modal functions ********//
 
   render() {
     let addModalClose = () => this.setState({ addModalShow: false });

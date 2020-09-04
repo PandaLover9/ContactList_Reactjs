@@ -3,16 +3,7 @@ import { Button, TextField, FormGroup } from "@material-ui/core";
 
 class ContactForm extends Component {
   render() {
-    const {
-      name,
-      gender,
-      phone,
-      email,
-      handleChange,
-      nameError,
-      emailError,
-      addContact
-    } = this.props;
+    const { name, gender, phone, email, handleChange, addContact } = this.props;
     return (
       <form>
         <FormGroup>
@@ -25,7 +16,6 @@ class ContactForm extends Component {
             onChange={handleChange}
             required
           />
-          {nameError ? "error" : ""}
         </FormGroup>
         <FormGroup>
           <TextField
@@ -56,7 +46,6 @@ class ContactForm extends Component {
             onChange={handleChange}
             required
           />
-          {emailError ? "The email already exists!" : ""}
         </FormGroup>
         <br />
         <FormGroup>

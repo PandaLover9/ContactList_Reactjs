@@ -12,8 +12,6 @@ class Contacts extends Component {
       gender,
       phone,
       email,
-      nameError,
-      emailError,
       searchedText,
       searchValue,
       addContact,
@@ -23,7 +21,7 @@ class Contacts extends Component {
     } = this.props;
     return (
       <div>
-        <Grid item xs={12} sm={12} align="center">
+        <Grid>
           <Typography variant="h5">Add / Edit Contact</Typography>
           <ContactCard
             addContact={addContact}
@@ -32,17 +30,13 @@ class Contacts extends Component {
             gender={gender}
             phone={phone}
             email={email}
-            nameError={nameError}
-            emailError={emailError}
           />
         </Grid>
         <Grid item xs={12} sm={12}>
           <SearchBar searchedText={searchedText} searchValue={searchValue} />
         </Grid>
         <Grid item>
-          <Typography className="contacts-header" align="center" variant="h5">
-            Contacts
-          </Typography>
+          <Typography>Contacts</Typography>
           <ContactList
             contacts={contacts}
             editContact={editContact}
